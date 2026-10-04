@@ -1,0 +1,33 @@
+.art {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+}
+.center {
+  position: absolute;
+  inset: 30%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+  z-index: 2;
+}
+.mark {
+  width: 78%;
+  height: auto;
+}
+.petal {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 40%;
+  aspect-ratio: 1;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  background: var(--petal);
+  color: var(--petal-on);
+}
+.petal svg {
+  width: 34%;
+  height: 34%;
+}

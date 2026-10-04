@@ -1,0 +1,15 @@
+.badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  background: var(--badge-bg);
+  color: var(--ink);
+}
+.round { border-radius: 50%; }
+.petal { border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%; }
+.sm { width: 40px; height: 40px; }
+.sm .icon { width: 20px; height: 20px; }
+.md { width: 56px; height: 56px; }
+.md .icon { width: 26px; height: 26px; }
+.lg { width: 72px; height: 72px; }
+.lg .icon { width: 32px; height: 32px; }

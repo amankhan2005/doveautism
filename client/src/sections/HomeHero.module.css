@@ -1,0 +1,124 @@
+.hero {
+  position: relative;
+  background: var(--mist);
+  padding-top: clamp(32px, 5vw, 72px);
+  padding-bottom: clamp(88px, 9vw, 140px);
+  overflow: hidden;
+}
+.grid {
+  display: grid;
+  gap: var(--s-6);
+  align-items: center;
+}
+.copy {
+  display: grid;
+  gap: var(--s-5);
+  max-width: 38rem;
+}
+.tagline {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: 0 var(--s-4) 0 var(--s-2);
+  border-radius: var(--r-pill);
+  background: var(--white);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--navy-deep);
+}
+.tagline::before {
+  content: '';
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: conic-gradient(#9ec05b 0 60deg, #bd2829 0 120deg, #e48744 0 180deg, #53b7f5 0 240deg, #922e8c 0 300deg, #5e2c8d 0);
+}
+.title {
+  max-width: 13ch;
+}
+.lead {
+  max-width: 34rem;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-2);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.7);
+  color: var(--ink);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color var(--dur), transform var(--dur) var(--ease-out);
+}
+.chip::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--chip-dot);
+}
+.chip:hover {
+  background: var(--white);
+  color: var(--navy-deep);
+  transform: translateY(-1px);
+}
+.chip:focus-visible {
+  border-radius: var(--r-pill);
+}
+.art {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 520px);
+}
+.illustration {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.wave {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: clamp(36px, 5vw, 80px);
+}
+
+@media (min-width: 960px) {
+  .grid {
+    grid-template-columns: 1.05fr 1fr;
+    gap: var(--s-7);
+  }
+  .art {
+    width: 100%;
+    max-width: 600px;
+    justify-self: end;
+  }
+}
+
+@media (max-width: 479px) {
+  .actions > * {
+    flex: 1 1 100%;
+  }
+  .art {
+    width: min(100%, 340px);
+  }
+}

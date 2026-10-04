@@ -1,0 +1,12 @@
+.head {
+  display: grid;
+  gap: var(--s-3);
+  margin-bottom: var(--s-6);
+}
+.updated {
+  color: var(--slate);
+  font-size: var(--fs-small);
+}
+.contact {
+  margin-top: var(--s-6);
+}

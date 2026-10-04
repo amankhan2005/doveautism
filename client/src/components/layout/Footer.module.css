@@ -1,0 +1,167 @@
+.footer {
+  /* Redeclared here: custom properties resolve where declared, so the
+     :root ring would stay navy (invisible on this background). */
+  --focus-ring: 0 0 0 3px var(--navy-deep), 0 0 0 6px #ffc48f;
+  position: relative;
+  background: var(--navy-deep);
+  color: rgb(255 255 255 / 0.88);
+  padding-top: var(--s-9);
+}
+.stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--stripe);
+}
+.grid {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: 1fr;
+}
+.brand {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+  justify-items: start;
+  max-width: 22rem;
+}
+.tagline {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.25;
+}
+.muted {
+  color: rgb(255 255 255 / 0.82);
+}
+.heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--s-3);
+}
+.list {
+  list-style: none;
+  display: grid;
+}
+.footer a {
+  color: rgb(255 255 255 / 0.9);
+  text-decoration: none;
+}
+.footer a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+.list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.muted a {
+  color: var(--white);
+  text-decoration: underline;
+}
+.contactList {
+  list-style: none;
+  display: grid;
+  gap: var(--s-3);
+}
+.contactList li {
+  display: flex;
+  gap: var(--s-3);
+  align-items: flex-start;
+}
+.contactList svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 3px;
+  color: var(--sun);
+}
+.skeleton {
+  display: grid;
+  gap: var(--s-3);
+}
+.skeleton span {
+  display: block;
+  height: 16px;
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.14);
+}
+.skeleton span:last-child {
+  width: 60%;
+}
+.social {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.social a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--s-4);
+  border: 1px solid rgb(255 255 255 / 0.35);
+  border-radius: var(--r-pill);
+}
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-top: var(--s-8);
+  padding-block: var(--s-5);
+  border-top: 1px solid rgb(255 255 255 / 0.16);
+  font-size: var(--fs-small);
+}
+.legal {
+  list-style: none;
+  display: flex;
+  gap: var(--s-4);
+}
+.legal a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.credit {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-1) var(--s-4);
+  color: rgb(255 255 255 / 0.72);
+  font-size: 0.875rem;
+}
+.credit a {
+  color: rgb(255 255 255 / 0.72);
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .brand,
+  .grid > div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+  .brand {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1.5fr 1fr 1.2fr 1.3fr;
+  }
+  .brand {
+    grid-column: auto;
+  }
+}

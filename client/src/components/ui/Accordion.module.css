@@ -1,0 +1,51 @@
+.list {
+  display: grid;
+  gap: var(--s-3);
+}
+.item {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  transition: border-color var(--dur), box-shadow var(--dur);
+}
+.open {
+  border-color: var(--navy);
+  box-shadow: var(--shadow-sm);
+}
+.heading {
+  font-size: var(--fs-h4);
+}
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: 64px;
+  padding: var(--s-4) var(--s-5);
+  background: none;
+  border: 0;
+  border-radius: var(--r-sm);
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 600;
+  cursor: pointer;
+}
+.chevron {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--navy-tint);
+  color: var(--navy-deep);
+}
+.panel {
+  overflow: hidden;
+}
+.answer {
+  padding: 0 var(--s-5) var(--s-5);
+  color: var(--slate);
+  max-width: 65ch;
+}

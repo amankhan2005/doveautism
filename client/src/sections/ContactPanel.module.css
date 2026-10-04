@@ -1,0 +1,92 @@
+.panel {
+  display: grid;
+  gap: var(--s-4);
+  align-content: start;
+}
+.card {
+  padding: var(--s-5);
+  border-radius: var(--r-card);
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+.heading {
+  font-size: 1.25rem;
+  margin-bottom: var(--s-4);
+}
+.details {
+  list-style: none;
+  display: grid;
+  gap: var(--s-4);
+}
+.details li {
+  display: flex;
+  gap: var(--s-3);
+}
+.details svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--navy);
+  margin-top: 2px;
+}
+.detailLabel {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--slate);
+}
+.details a {
+  font-weight: 700;
+  word-break: break-word;
+}
+.steps {
+  list-style: none;
+  display: grid;
+  gap: var(--s-4);
+}
+.steps li {
+  display: flex;
+  gap: var(--s-3);
+}
+.num {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--navy-tint);
+  color: var(--navy-deep);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+.stepText {
+  display: block;
+  color: var(--slate);
+  font-size: var(--fs-small);
+}
+.privacy {
+  display: flex;
+  gap: var(--s-3);
+  background: var(--navy-tint);
+  border-color: transparent;
+  font-size: var(--fs-small);
+}
+.privacy svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--navy-deep);
+}
+.skeleton {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  border-radius: var(--r-card);
+  background: var(--white);
+}
+.skeleton span:not(:global(.visually-hidden)) {
+  display: block;
+  height: 14px;
+  border-radius: var(--r-pill);
+  background: var(--mist);
+}

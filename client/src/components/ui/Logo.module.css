@@ -1,0 +1,25 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  /* Clear space: never less than the height of the "A" in AUTISM around the mark */
+  padding-block: 4px;
+  text-decoration: none;
+  flex: none;
+}
+.img {
+  display: block;
+  height: var(--logo-h);
+  width: auto;
+}
+.logo:focus-visible {
+  border-radius: 10px;
+}
+.panel {
+  padding: 14px 20px;
+  border-radius: var(--r-sm);
+  background: var(--white);
+}
+.panel .img {
+  height: 54px;
+}

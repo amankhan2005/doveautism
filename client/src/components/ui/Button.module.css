@@ -1,0 +1,113 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 52px;
+  padding: 0 var(--s-5);
+  border: 2px solid transparent;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.button:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--r-pill);
+}
+.button:disabled {
+  cursor: progress;
+  opacity: 0.85;
+}
+
+.button > span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.sm { min-height: 48px; padding: 0 var(--s-4); font-size: 1rem; }
+.md { }
+.lg { min-height: 58px; padding: 0 var(--s-6); font-size: 1.125rem; }
+.block { width: 100%; }
+
+.primary {
+  background: var(--navy);
+  color: var(--white);
+  box-shadow: 0 10px 24px -12px rgb(30 76 120 / 0.5);
+}
+.primary:hover {
+  background: var(--navy-deep);
+  color: var(--white);
+}
+
+.accent {
+  background: var(--orange);
+  color: var(--ink);
+  box-shadow: 0 10px 24px -12px rgb(228 135 68 / 0.55);
+}
+.accent:hover {
+  background: var(--orange-hover);
+  color: var(--ink);
+}
+
+.secondary {
+  background: var(--white);
+  color: var(--navy-deep);
+  border-color: var(--line-strong);
+}
+.secondary:hover {
+  border-color: var(--navy);
+  color: var(--navy-deep);
+  background: var(--navy-tint);
+}
+
+.inverse {
+  background: var(--white);
+  color: var(--navy-deep);
+}
+.inverse:hover {
+  background: var(--dawn);
+  color: var(--navy-deep);
+}
+
+.ghostInverse {
+  background: transparent;
+  color: var(--white);
+  border-color: rgb(255 255 255 / 0.5);
+}
+.ghostInverse:hover {
+  border-color: var(--white);
+  color: var(--white);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--navy-deep);
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 calc(100% - 8px) / 100% 2px no-repeat;
+  transition: background-size var(--dur) var(--ease-out), color var(--dur);
+}
+.textLink:hover {
+  background-size: 0% 2px;
+  background-position: 100% calc(100% - 8px);
+  color: var(--navy);
+}

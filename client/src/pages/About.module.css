@@ -1,0 +1,63 @@
+.approach {
+  list-style: none;
+  display: grid;
+  gap: var(--s-5);
+  margin-top: var(--s-7);
+}
+.point {
+  display: grid;
+  gap: var(--s-3);
+  align-content: start;
+  padding: var(--s-6) var(--s-5);
+  border-radius: var(--r-card);
+  border: 1px solid var(--line);
+}
+.point p {
+  color: var(--slate);
+}
+.split {
+  display: grid;
+  gap: var(--s-5);
+}
+.splitBody {
+  display: grid;
+  gap: var(--s-5);
+  justify-items: start;
+}
+.big {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  line-height: 1.5;
+  max-width: 40rem;
+}
+.team {
+  list-style: none;
+  display: grid;
+  gap: var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  width: 100%;
+}
+.member {
+  padding: var(--s-5);
+  border-radius: var(--r-sm);
+  background: var(--white);
+}
+.member p {
+  color: var(--slate);
+}
+
+@media (min-width: 900px) {
+  .approach {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .split {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: var(--s-8);
+    align-items: start;
+  }
+}
+
+.familyPhoto {
+  margin-top: var(--s-3);
+  max-width: 40rem;
+}

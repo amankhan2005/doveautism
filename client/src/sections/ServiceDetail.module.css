@@ -1,0 +1,113 @@
+.grid {
+  display: grid;
+  gap: var(--s-6);
+  align-items: center;
+}
+.visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  max-height: 400px;
+  width: 100%;
+  border-radius: var(--r-lg);
+  background: var(--tint);
+  overflow: hidden;
+  isolation: isolate;
+}
+.shapeA,
+.shapeB {
+  position: absolute;
+  z-index: -1;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  background: var(--accent);
+}
+.shapeA {
+  width: 46%;
+  aspect-ratio: 1;
+  right: -8%;
+  top: -10%;
+  opacity: 0.55;
+}
+.shapeB {
+  width: 22%;
+  aspect-ratio: 1;
+  left: 10%;
+  bottom: 12%;
+  opacity: 0.4;
+  border-radius: 50%;
+}
+.iconWrap {
+  display: grid;
+  place-items: center;
+  width: clamp(120px, 18vw, 168px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+  color: var(--navy-deep);
+}
+.iconWrap svg {
+  width: 46%;
+  height: 46%;
+}
+.copy {
+  display: grid;
+  gap: var(--s-4);
+  justify-items: start;
+  max-width: 36rem;
+}
+.title:focus-visible {
+  box-shadow: none;
+}
+.audience {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--navy-tint);
+  color: var(--navy-deep);
+  font-weight: 700;
+  font-size: var(--fs-small);
+}
+.note {
+  color: var(--slate);
+  font-size: var(--fs-small);
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--s-8);
+  }
+  .flip {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+  .flip .visual {
+    order: 2;
+  }
+}
+
+/* With a photo: image fills the panel, icon becomes a small corner badge */
+.photo {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border-radius: inherit;
+  z-index: 0;
+}
+.hasPhoto {
+  place-items: end start;
+  padding: var(--s-4);
+}
+.hasPhoto .shapeA,
+.hasPhoto .shapeB {
+  display: none;
+}
+.hasPhoto .iconWrap {
+  position: relative;
+  z-index: 1;
+  width: 64px;
+  box-shadow: var(--shadow-md);
+}

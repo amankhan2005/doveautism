@@ -1,0 +1,13 @@
+.section {
+  position: relative;
+  isolation: isolate;
+}
+.space-default { padding-block: var(--section-y); }
+.space-compact { padding-block: calc(var(--section-y) * 0.6); }
+.space-none { padding-block: 0; }
+
+.white { background: var(--white); }
+.mist { background: var(--mist); }
+.dawn { background: var(--dawn); }
+.lagoon { background: var(--navy-deep); color: var(--white); }
+.lagoon :where(h1, h2, h3, h4) { color: var(--white); }

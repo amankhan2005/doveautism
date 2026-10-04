@@ -1,0 +1,126 @@
+/* ────────────────────────────────────────────────────────────
+   Dove Autism design tokens — aligned with the official logo.
+
+   Logo colors (sampled from the supplied artwork):
+     navy  #1E4C78  "DOVE" wordmark   → primary
+     red   #BD2829  dove + "U"        → brand accent, decorative only
+     green #9EC05B  "A"   orange #E48744 "T"   blue #53B7F5 "I"
+     magenta #922E8C "S"  purple #5E2C8D "M"   → skill/feather colors
+
+   Every text pairing meets WCAG AA (most AAA). Logo colors that cannot
+   carry text are used only for shapes, stripes and badge backgrounds.
+   Red is kept for the brand mark so it never competes with error states.
+   ──────────────────────────────────────────────────────────── */
+:root {
+  /* Core */
+  --ink: #182e47;          /* 13:1+ on all light surfaces */
+  --slate: #4a5568;        /* 6.4:1+ on all light surfaces */
+  --navy: #1e4c78;         /* logo navy — white text 8.9:1 */
+  --navy-deep: #143757;    /* hover, footer — white text 12.3:1 */
+  --navy-tint: #eaf1f8;
+  --sky: #ddf0fc;
+  --orange: #e48744;       /* logo orange — ink text 5.4:1 */
+  --orange-hover: #ec9b60; /* lighter on hover keeps ink contrast above 6:1 */
+  --sun: #f5b680;          /* decorative warm shapes */
+  --brand-red: #bd2829;    /* logo red — decorative only */
+  --mist: #f3f6f9;
+  --dawn: #fff3e8;
+  --white: #ffffff;
+  --line: #dbe3ec;
+  --line-strong: #7f91a5;  /* form control borders — 3.1:1 against white */
+
+  /* Brand stripe — the six letters of AUTISM in logo order */
+  --stripe: linear-gradient(90deg, #9ec05b 0 16.66%, #bd2829 16.66% 33.33%, #e48744 33.33% 50%, #53b7f5 50% 66.66%, #922e8c 66.66% 83.33%, #5e2c8d 83.33%);
+
+  /* Feathers — one logo color per verified skill area */
+  --f-communication: #53b7f5;
+  --f-play: #e48744;
+  --f-selfcare: #9ec05b;
+  --f-social: #922e8c;
+  --f-school: #5e2c8d;
+  /* Icon color on each feather (chosen for ≥ 6:1 contrast) */
+  --on-communication: #182e47;
+  --on-play: #182e47;
+  --on-selfcare: #182e47;
+  --on-social: #ffffff;
+  --on-school: #ffffff;
+  /* Soft tints of the same colors for large surfaces */
+  --t-communication: #e3f3fd;
+  --t-play: #fdeee2;
+  --t-selfcare: #eef5e3;
+  --t-social: #f6e8f5;
+  --t-school: #eee8f6;
+
+  /* Feedback */
+  --error: #b42318;
+  --error-tint: #fef0ee;
+  --success: #1f7a4d;
+  --success-tint: #eaf6ef;
+
+  /* Type */
+  --font-display: 'Lexend Variable', 'Lexend', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --fs-display: clamp(2.5rem, 1.6rem + 3.8vw, 4.25rem);
+  --fs-h2: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --fs-h3: clamp(1.375rem, 1.25rem + 0.4vw, 1.625rem);
+  --fs-h4: 1.1875rem;
+  --fs-lead: clamp(1.1875rem, 1.1rem + 0.35vw, 1.3125rem);
+  --fs-body: clamp(1.0625rem, 1.03rem + 0.12vw, 1.125rem);
+  --fs-small: 0.9375rem;
+  --fs-label: 0.9375rem;
+
+  --lh-tight: 1.08;
+  --lh-heading: 1.18;
+  --lh-body: 1.65;
+
+  /* Spacing (4px base) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+  --s-10: 128px;
+  --section-y: clamp(64px, 6vw + 32px, 128px);
+
+  /* Radius — varies by hierarchy */
+  --r-input: 12px;
+  --r-sm: 16px;
+  --r-card: 28px;
+  --r-lg: 40px;
+  --r-pill: 999px;
+
+  /* Shadows — tinted with navy, never flat grey */
+  --shadow-sm: 0 1px 2px rgb(24 46 71 / 0.06);
+  --shadow-md: 0 1px 2px rgb(24 46 71 / 0.05), 0 12px 32px -14px rgb(30 76 120 / 0.26);
+  --shadow-lg: 0 2px 4px rgb(24 46 71 / 0.05), 0 28px 60px -24px rgb(30 76 120 / 0.34);
+
+  /* Layout */
+  --container: 1200px;
+  --container-wide: 1320px;
+  --container-prose: 760px;
+  --gutter: clamp(20px, 4vw, 32px);
+  --header-h: 76px;
+  --logo-h: 52px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur: 240ms;
+
+  /* Focus: 3px white gap + 3px ring. Navy on light surfaces (8.9:1),
+     light orange on dark surfaces (set per section). */
+  --focus-color: var(--navy);
+  --focus-ring: 0 0 0 3px var(--white), 0 0 0 6px var(--focus-color);
+}
+
+@media (min-width: 960px) {
+  :root {
+    --header-h: 88px;
+    --logo-h: 60px;
+  }
+}

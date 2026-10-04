@@ -1,0 +1,34 @@
+.jump {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+.jumpLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 48px;
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--white);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: var(--fs-small);
+  text-decoration: none;
+  transition: border-color var(--dur), background-color var(--dur), transform var(--dur) var(--ease-out);
+}
+.jumpLink svg {
+  width: 20px;
+  height: 20px;
+  color: var(--navy-deep);
+}
+.jumpLink:hover {
+  border-color: var(--navy);
+  color: var(--navy-deep);
+  transform: translateY(-1px);
+}
+.jumpLink:focus-visible {
+  border-radius: var(--r-pill);
+}

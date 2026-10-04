@@ -1,0 +1,63 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(40px, 6vw, 88px) clamp(56px, 7vw, 104px);
+}
+.mist { background: var(--mist); }
+.dawn { background: var(--dawn); }
+.grid {
+  display: grid;
+  gap: var(--s-6);
+  align-items: center;
+}
+.copy {
+  display: grid;
+  gap: var(--s-5);
+  max-width: 44rem;
+}
+.title {
+  font-size: clamp(2.375rem, 1.7rem + 2.8vw, 3.75rem);
+}
+.lead {
+  max-width: 40rem;
+}
+.art {
+  justify-self: center;
+  width: min(100%, 420px);
+}
+.art svg {
+  width: 100%;
+  height: auto;
+}
+.blobA,
+.blobB {
+  position: absolute;
+  z-index: -1;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+}
+.blobA {
+  width: 280px;
+  height: 260px;
+  right: -90px;
+  top: -80px;
+  background: var(--sky);
+  opacity: 0.6;
+}
+.blobB {
+  width: 140px;
+  height: 130px;
+  left: -50px;
+  bottom: -60px;
+  background: var(--sun);
+  opacity: 0.35;
+}
+.withArt .blobA {
+  opacity: 0.35;
+}
+
+@media (min-width: 960px) {
+  .withArt {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}

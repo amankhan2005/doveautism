@@ -1,0 +1,82 @@
+{
+  "about-family": {
+    "width": 5427,
+    "height": 3623,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "about-hero": {
+    "width": 3936,
+    "height": 2624,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "home-cta": {
+    "width": 5425,
+    "height": 3617,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "home-why": {
+    "width": 4000,
+    "height": 6000,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "services-early-intervention": {
+    "width": 6720,
+    "height": 4480,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "services-family-support": {
+    "width": 6116,
+    "height": 4077,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "services-in-home-aba": {
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  },
+  "services-school-readiness": {
+    "width": 6000,
+    "height": 4000,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ]
+  }
+}

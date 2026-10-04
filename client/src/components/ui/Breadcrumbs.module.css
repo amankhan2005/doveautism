@@ -1,0 +1,21 @@
+.crumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  list-style: none;
+  font-size: var(--fs-small);
+  color: var(--slate);
+}
+.crumbs li + li::before {
+  content: '/';
+  margin-right: var(--s-2);
+  color: var(--line-strong);
+}
+.crumbs a {
+  color: var(--slate);
+  text-decoration: none;
+}
+.crumbs a:hover {
+  color: var(--navy-deep);
+  text-decoration: underline;
+}

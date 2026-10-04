@@ -1,0 +1,184 @@
+.wrap {
+  position: relative;
+}
+.form,
+.success {
+  display: grid;
+  gap: var(--s-5);
+  padding: clamp(24px, 4vw, 44px);
+  border-radius: var(--r-lg);
+  background: var(--white);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+}
+.head {
+  display: grid;
+  gap: var(--s-2);
+}
+.title {
+  font-size: var(--fs-h3);
+}
+.legend {
+  color: var(--slate);
+  font-size: var(--fs-small);
+}
+.req {
+  color: var(--navy-deep);
+}
+.row {
+  display: grid;
+  gap: var(--s-5);
+}
+.notice {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-4);
+  border-radius: var(--r-sm);
+  background: var(--dawn);
+  font-size: var(--fs-small);
+}
+.notice svg {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  color: var(--navy-deep);
+}
+.messageWrap {
+  position: relative;
+}
+.counter {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  font-size: 0.8125rem;
+  color: var(--slate);
+  background: rgb(255 255 255 / 0.9);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+.counterWarn {
+  color: var(--error);
+  font-weight: 700;
+}
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.summary {
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-sm);
+  border: 2px solid var(--error);
+  background: var(--error-tint);
+}
+.summary:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--r-sm);
+}
+.summaryTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-weight: 700;
+  color: var(--error);
+  margin-bottom: var(--s-2);
+}
+.summaryTitle svg {
+  width: 20px;
+  height: 20px;
+}
+.summary ul {
+  padding-left: 1.25em;
+  display: grid;
+  gap: var(--s-1);
+}
+.summary a {
+  color: var(--ink);
+}
+.serverError {
+  display: flex;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-sm);
+  border: 2px solid var(--error);
+  background: var(--error-tint);
+}
+.serverError > svg {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  color: var(--error);
+}
+.serverError:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--r-sm);
+}
+.serverErrorTitle {
+  font-weight: 700;
+  color: var(--error);
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 0.9s linear infinite;
+}
+.sendIcon {
+  width: 20px;
+  height: 20px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.success {
+  justify-items: start;
+  background: linear-gradient(var(--white), var(--white)) padding-box;
+}
+.successIcon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--success-tint);
+  color: var(--success);
+}
+.successIcon svg {
+  width: 38px;
+  height: 38px;
+}
+.successTitle {
+  font-size: var(--fs-h2);
+}
+.successTitle:focus-visible {
+  box-shadow: none;
+}
+.successNote {
+  color: var(--slate);
+}
+.successActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4);
+}
+.successLink {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+@media (min-width: 720px) {
+  .row {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
