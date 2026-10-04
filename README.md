@@ -42,8 +42,9 @@ cp client/.env.example client/.env      # optional
 Run two terminals:
 
 ```bash
-npm run dev:server     # Express API on http://localhost:5000 (restarts on change)
-npm run dev:client     # Vite on http://localhost:5173 — proxies /api, /sitemap.xml, /robots.txt to :5000
+npm run dev:server     # Express API on http://localhost:5050 (restarts on change)
+npm run dev:client     # Vite on http://localhost:5173 — proxies /api, /sitemap.xml, /robots.txt to :5050
+                       # (port 5000 is avoided: macOS AirPlay Receiver answers it with 403)
 ```
 
 Open http://localhost:5173.
@@ -197,7 +198,7 @@ server {
   server_name www.doveautism.com;
   # ssl_certificate ...; ssl_certificate_key ...;
   location / {
-    proxy_pass http://127.0.0.1:5000;
+    proxy_pass http://127.0.0.1:5050;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;

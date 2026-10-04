@@ -30,7 +30,7 @@ export function SkillAreas({ tone = 'mist', headingLevel = 2 }) {
           </svg>
         </m.div>
         <div className={styles.copy}>
-          <SectionHeading id="skills-title" title={PROPOSED.skillsHeading} intro={PROPOSED.skillsIntro} level={headingLevel} />
+          <SectionHeading id="skills-title" title={PROPOSED.skillsHeading} intro={PROPOSED.skillsIntro} level={headingLevel} className={styles.heading} />
           <Stagger as="ul" className={styles.list} onMouseLeave={() => setActive(null)}>
             {SKILLS.map((s) => {
               const Icon = s.icon;

@@ -12,17 +12,18 @@ import { redirects } from './middleware/redirects.js';
 import { apiNotFound, errorHandler } from './middleware/errorHandler.js';
 import { apiRoutes } from './routes/api.routes.js';
 import { seoRoutes } from './routes/seo.routes.js';
-import { sendInquiryEmails as defaultSender } from './services/email.service.js';
+import { sendInquiryEmails as defaultSender, sendApplicationEmails as defaultApplicationSender } from './services/email.service.js';
 import { recordInquiry as defaultRecorder } from './services/inquiryLog.service.js';
 import { renderPage } from './utils/renderPage.js';
 
 /**
  * App factory. Dependencies are injectable so tests can replace the email
- * sender without touching Resend.
+ * senders without touching Resend.
  */
 export function createApp({
   env = defaultEnv,
   sendInquiryEmails = defaultSender,
+  sendApplicationEmails = defaultApplicationSender,
   isEmailConfigured = defaultIsEmailConfigured,
   recordInquiry = defaultRecorder,
   serveClient = true,
@@ -69,7 +70,7 @@ export function createApp({
       maxAge: 600,
     }),
     express.json({ limit: '10kb' }),
-    apiRoutes({ env, sendInquiryEmails, isEmailConfigured, recordInquiry }),
+    apiRoutes({ env, sendInquiryEmails, sendApplicationEmails, isEmailConfigured, recordInquiry }),
     apiNotFound
   );
 

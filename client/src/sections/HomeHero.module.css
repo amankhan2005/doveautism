@@ -122,3 +122,93 @@
     width: min(100%, 340px);
   }
 }
+
+/* ── Phones: type-led hero, photo bleeds off the right edge into the wave ── */
+@media (max-width: 639px) {
+  .hero {
+    padding-top: var(--s-6);
+    padding-bottom: 0;
+  }
+  .grid {
+    gap: var(--s-7);
+  }
+  .copy {
+    gap: var(--s-4);
+  }
+  .tagline {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+  }
+  .tagline::before {
+    width: 18px;
+    height: 18px;
+  }
+  .title {
+    max-width: 12ch;
+    font-size: clamp(2.125rem, 1.5rem + 3vw, 2.5rem);
+    line-height: 1.08;
+  }
+  .lead {
+    max-width: 34ch;
+  }
+  .actions {
+    align-items: center;
+    gap: var(--s-2) var(--s-5);
+    margin-top: var(--s-2);
+  }
+  .actions > * {
+    flex: none;
+  }
+  .actions > :first-child {
+    padding-inline: var(--s-6);
+  }
+  /* Secondary path reads as a quiet text link next to the main button. */
+  .actions > .secondary {
+    min-height: 48px;
+    padding: 0 var(--s-1);
+    border-color: transparent;
+    background: none;
+    box-shadow: none;
+    font-size: 1.0625rem;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+  .actions > .secondary:hover {
+    background: none;
+    border-color: transparent;
+    color: var(--navy);
+  }
+  .chips {
+    display: none;
+  }
+  .photoWrap {
+    position: relative;
+    margin-left: var(--s-7);
+    margin-right: calc(var(--gutter) * -1);
+  }
+  /* One warm sun shape, echoing the desktop illustration, tucked behind the curve. */
+  .photoWrap::before {
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: -26px;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--sun);
+  }
+  .photo {
+    border-radius: clamp(96px, 34vw, 160px) 0 0 0;
+  }
+  .photo img {
+    object-position: 50% 42%;
+  }
+  .wave {
+    z-index: 1;
+  }
+}

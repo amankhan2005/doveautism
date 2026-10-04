@@ -36,13 +36,15 @@ export const Button = forwardRef(function Button(
   { variant = 'primary', size = 'md', block = false, className, icon: Icon, type = 'button', children, disabled, ...rest },
   ref
 ) {
+  // aria-disabled keeps the button focusable (so its hint is reachable) while it looks and acts inactive.
+  const inactive = disabled || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true';
   return (
     <m.button
       ref={ref}
       type={type}
       className={classes(variant, size, block, className)}
-      whileHover={disabled ? undefined : hover}
-      whileTap={disabled ? undefined : tap}
+      whileHover={inactive ? undefined : hover}
+      whileTap={inactive ? undefined : tap}
       disabled={disabled}
       {...rest}
     >

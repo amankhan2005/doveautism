@@ -1,0 +1,9 @@
+/* Phone-only rhythm and type scale for the home page. Tablet and desktop use the global tokens. */
+@media (max-width: 639px) {
+  .page {
+    --section-y: 56px;
+    --fs-h2: clamp(1.625rem, 1.3rem + 1.6vw, 1.875rem);
+    --fs-h3: 1.1875rem;
+    --fs-lead: 1.0625rem;
+  }
+}

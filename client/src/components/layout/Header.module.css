@@ -98,6 +98,28 @@
   border-radius: var(--r-pill);
 }
 
+@media (max-width: 639px) {
+  .inner {
+    gap: var(--s-4);
+  }
+  .menuButton {
+    min-height: 44px;
+    padding: 0 var(--s-4) 0 var(--s-3);
+    border-width: 1.5px;
+    font-size: 0.9375rem;
+    color: var(--ink);
+    transition: background-color var(--dur), border-color var(--dur);
+  }
+  .menuButton:hover {
+    background: var(--navy-tint);
+    border-color: var(--navy);
+  }
+  .menuButton svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 @media (min-width: 960px) {
   .nav {
     display: flex;

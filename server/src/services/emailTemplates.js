@@ -1,5 +1,6 @@
 import { escapeHtml, escapeMultiline } from '../utils/escapeHtml.js';
 import { SERVICE_OPTIONS, CONTACT_METHODS, labelFor } from '../../../shared/contactSchema.js';
+import { roleTitle, stateName } from '../../../shared/careersSchema.js';
 
 /**
  * Email-safe templates: table layout, inline styles, system fonts,
@@ -82,10 +83,12 @@ ${rows
 </table>`;
 }
 
+const formatWhen = (date) => date.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC';
+
 export function notificationEmail(data, { submittedAt = new Date(), siteUrl } = {}) {
   const service = labelFor(SERVICE_OPTIONS, data.service);
   const method = labelFor(CONTACT_METHODS, data.preferredContact) || 'No preference';
-  const when = submittedAt.toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }) + ' UTC';
+  const when = formatWhen(submittedAt);
   // Generic subject on purpose: subjects appear in lock-screen and notification
   // previews, so names and service details stay in the message body.
   const subject = 'New website inquiry — Dove Autism';
@@ -166,6 +169,86 @@ export function confirmationEmail(data, { siteUrl } = {}) {
   ]
     .filter((line, i, arr) => !(line === '' && arr[i - 1] === ''))
     .join('\n');
+
+  return { subject, html, text };
+}
+
+/* ── Careers ─────────────────────────────────────────── */
+
+export function applicationNotificationEmail(data, { submittedAt = new Date(), siteUrl } = {}) {
+  const name = `${data.firstName} ${data.lastName}`;
+  const position = roleTitle(data.role);
+  const state = stateName(data.state);
+  const when = formatWhen(submittedAt);
+  // Subject format requested by Dove Autism. Inputs are single-line and length-limited by the schema.
+  const subject = `New Careers Application — ${data.role} — ${name}`;
+
+  const rows = [
+    ['Name', escapeHtml(name)],
+    ['Email', `<a href="mailto:${escapeHtml(data.email)}" style="color:${C.navy};">${escapeHtml(data.email)}</a>`],
+    ['Phone', escapeHtml(data.phone)],
+    ['State', escapeHtml(state)],
+    ['Position', escapeHtml(position)],
+    ['Submitted', escapeHtml(when)],
+  ];
+
+  const body = `${detailRows(rows)}
+<p style="margin:24px 0 0 0;"><a href="mailto:${escapeHtml(data.email)}" style="display:inline-block;padding:12px 22px;background:${C.navy};color:#ffffff;text-decoration:none;border-radius:999px;font-weight:700;font-size:15px;">Reply to ${escapeHtml(data.firstName)}</a></p>`;
+
+  const html = layout({
+    siteUrl,
+    preheader: `${name} applied for the ${data.role} position.`,
+    heading: 'New Careers Application',
+    intro: 'A candidate applied through the careers page on the Dove Autism website. Replying to this email goes straight to them.',
+    body,
+    footerNote:
+      'Sent automatically by the doveautism.com careers form. This message contains personal information — handle it according to your privacy policy.',
+  });
+
+  const text = [
+    'New Careers Application',
+    '',
+    `Name: ${name}`,
+    `Email: ${data.email}`,
+    `Phone: ${data.phone}`,
+    `State: ${state}`,
+    `Position: ${position}`,
+    `Submitted: ${when}`,
+  ].join('\n');
+
+  return { subject, html, text };
+}
+
+export function applicationConfirmationEmail(data, { siteUrl } = {}) {
+  const subject = 'Application Received — Dove Autism';
+  const position = roleTitle(data.role);
+
+  const body = `<p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:${C.ink};">We’ve received your application for the <strong>${escapeHtml(position)}</strong> position.</p>
+<p style="margin:0 0 16px 0;font-size:16px;line-height:1.6;color:${C.ink};">Our team will review the information you submitted.</p>
+<p style="margin:0;font-size:16px;line-height:1.6;color:${C.ink};">Thank you,<br />Dove Autism</p>`;
+
+  const html = layout({
+    siteUrl,
+    preheader: 'Thank you for your interest in joining Dove Autism.',
+    heading: `Hello ${data.firstName},`,
+    intro: 'Thank you for your interest in joining Dove Autism.',
+    body,
+    footerNote:
+      'You are receiving this email because this address was entered in the careers application on doveautism.com. If you did not apply, you can ignore this email.',
+  });
+
+  const text = [
+    `Hello ${data.firstName},`,
+    '',
+    'Thank you for your interest in joining Dove Autism.',
+    '',
+    `We’ve received your application for the ${position} position.`,
+    '',
+    'Our team will review the information you submitted.',
+    '',
+    'Thank you,',
+    'Dove Autism',
+  ].join('\n');
 
   return { subject, html, text };
 }

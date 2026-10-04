@@ -70,3 +70,68 @@
     gap: var(--s-8);
   }
 }
+
+/* ── Home page, phones: dove medallion beside the heading, skills as a two-up grid ── */
+@media (max-width: 639px) {
+  :global([data-page='home']) .grid {
+    position: relative;
+    gap: 0;
+  }
+  :global([data-page='home']) .art {
+    position: absolute;
+    top: -12px;
+    right: calc(var(--gutter) - 10px);
+    width: clamp(104px, 30vw, 132px);
+  }
+  :global([data-page='home']) .copy {
+    gap: var(--s-6);
+  }
+  :global([data-page='home']) .heading h2 {
+    padding-right: clamp(104px, 30vw, 132px);
+  }
+  :global([data-page='home']) .list {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-3);
+  }
+  :global([data-page='home']) .skill {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-3);
+    padding: var(--s-4) var(--s-3) var(--s-4) var(--s-4);
+    background: var(--white);
+    border-color: var(--white);
+  }
+  :global([data-page='home']) .skill:last-child {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+  }
+  :global([data-page='home']) .on {
+    border-color: var(--line);
+  }
+  :global([data-page='home']) .feather {
+    width: 44px;
+    height: 44px;
+  }
+  :global([data-page='home']) .feather svg {
+    width: 21px;
+    height: 21px;
+  }
+  :global([data-page='home']) .name {
+    font-size: 1.0625rem;
+  }
+  :global([data-page='home']) .text {
+    margin-top: 2px;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+@media (max-width: 359px) {
+  :global([data-page='home']) .list {
+    grid-template-columns: 1fr;
+  }
+  :global([data-page='home']) .skill {
+    flex-direction: row;
+    align-items: center;
+  }
+}

@@ -22,7 +22,8 @@ const isProd = nodeEnv === 'production';
 export const env = Object.freeze({
   nodeEnv,
   isProd,
-  port: Number(process.env.PORT) || 5000,
+  // Not 5000: macOS reserves it for AirPlay Receiver, which answers every request with 403.
+  port: Number(process.env.PORT) || 5050,
   siteUrl: (process.env.SITE_URL || 'https://www.doveautism.com').replace(/\/+$/, ''),
   corsOrigins: list(process.env.CORS_ORIGINS),
   // Number of reverse proxies in front of the app (needed for correct client IPs in rate limiting).
@@ -39,6 +40,11 @@ export const env = Object.freeze({
   contactRateLimit: Object.freeze({
     windowMs: 15 * 60 * 1000,
     max: Number(process.env.CONTACT_RATE_LIMIT_MAX) || 5,
+  }),
+
+  careersRateLimit: Object.freeze({
+    windowMs: 15 * 60 * 1000,
+    max: Number(process.env.CAREERS_RATE_LIMIT_MAX) || 5,
   }),
 
   mongoUri: optional(process.env.MONGODB_URI),

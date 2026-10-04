@@ -173,3 +173,153 @@
   padding-top: 1px;
   line-height: 1.5;
 }
+
+/* ── Security check (math CAPTCHA) ── */
+.captcha {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-4) var(--s-5) var(--s-5);
+  border-radius: var(--r-sm);
+  background: var(--mist);
+  border: 1px solid var(--line);
+}
+.captchaTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--navy-deep);
+}
+.captchaTitle svg {
+  width: 20px;
+  height: 20px;
+}
+.captchaRefresh {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 44px;
+  padding: 0 var(--s-2);
+  border: 0;
+  border-radius: var(--r-input);
+  background: none;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-small);
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+.captchaRefresh svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.4s var(--ease-out);
+}
+.captchaRefresh:hover svg {
+  transform: rotate(90deg);
+}
+.captchaQuestion {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--navy-deep);
+}
+.captchaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+}
+.captchaInput {
+  width: 7.5rem;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.captchaOk {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  font-weight: 700;
+  color: var(--success);
+}
+.captchaOk svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Radio cards ── */
+.cards {
+  display: grid;
+  gap: var(--s-3);
+}
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  min-height: 56px;
+  padding: var(--s-4);
+  border: 2px solid var(--line-strong);
+  border-radius: var(--r-input);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color var(--dur-fast), background-color var(--dur-fast);
+}
+.card:hover {
+  border-color: var(--navy);
+}
+.cardOn {
+  border-color: var(--navy);
+  background: var(--navy-tint);
+}
+.hasError .card {
+  border-color: var(--error);
+}
+.cardInput {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.card:has(.cardInput:focus-visible) {
+  box-shadow: var(--focus-ring);
+}
+.cardMark {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--white);
+  transition: border-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+.cardOn .cardMark {
+  border-color: var(--navy);
+  box-shadow: inset 0 0 0 4px var(--white), inset 0 0 0 11px var(--navy);
+}
+.cardText {
+  display: grid;
+  gap: 2px;
+}
+.cardTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: var(--ink);
+}
+.cardDesc {
+  font-size: var(--fs-small);
+  color: var(--slate);
+  line-height: 1.4;
+}
+@media (min-width: 720px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

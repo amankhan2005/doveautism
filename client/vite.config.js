@@ -4,6 +4,10 @@ import { fileURLToPath } from 'node:url';
 
 const shared = fileURLToPath(new URL('../shared', import.meta.url));
 
+// Development only: where `npm run dev:server` listens (server PORT, default 5050).
+// Not :5000 — on macOS that is AirPlay Receiver, which answers /api with an empty 403.
+const API_TARGET = process.env.API_PROXY_TARGET || 'http://localhost:5050';
+
 /**
  * Preload the three font files used above the fold so text renders in its
  * final font on first paint (avoids layout shift from font swapping).
@@ -32,11 +36,11 @@ export default defineConfig({
   server: {
     port: 5173,
     fs: { allow: ['..'] },
-    // In development, API + SEO routes are served by Express on :5000.
+    // In development, API + SEO routes are served by Express (see API_TARGET).
     proxy: {
-      '/api': 'http://localhost:5000',
-      '/sitemap.xml': 'http://localhost:5000',
-      '/robots.txt': 'http://localhost:5000',
+      '/api': API_TARGET,
+      '/sitemap.xml': API_TARGET,
+      '/robots.txt': API_TARGET,
     },
   },
   build: {

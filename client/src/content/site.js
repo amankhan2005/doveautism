@@ -47,3 +47,15 @@ export const PROPOSED = Object.freeze({
   servicesPageHeading: 'ABA therapy services for children with autism',
   serviceDetailNote: 'Program details, scheduling and next steps are shared during your first conversation with our team.',
 });
+
+/** Wording explicitly requested by Dove Autism. Do not extend these claims without their confirmation. */
+export const CLIENT = Object.freeze({
+  noWaitlist: 'No waitlist',
+  acceptingFamilies: 'currently accepting new families.',
+});
+
+export const CAREERS = Object.freeze({
+  heading: 'Join our team',
+  intro:
+    'We welcome applications from RBTs, BTs and BCBAs who share our belief that every child can learn. The application asks for a few basic details — no resume needed for now.',
+});

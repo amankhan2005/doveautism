@@ -56,3 +56,43 @@
   max-width: 460px;
   margin-inline: auto;
 }
+
+/* ── Phones: this photo leads the hero instead, so the section is type-led ── */
+@media (max-width: 639px) {
+  .art {
+    display: none;
+  }
+  .copy {
+    gap: var(--s-5);
+  }
+  .statement {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  .pillars {
+    gap: var(--s-5);
+    width: 100%;
+    margin-block: var(--s-2);
+    padding: var(--s-5);
+    border-radius: var(--r-card);
+    background: var(--mist);
+  }
+  .pillar > :first-child {
+    width: 44px;
+    height: 44px;
+    background: var(--white);
+  }
+  .pillar > :first-child svg {
+    width: 22px;
+    height: 22px;
+  }
+  .pillarTitle {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    margin-bottom: 2px;
+  }
+  .pillarText {
+    font-size: var(--fs-small);
+    line-height: 1.55;
+  }
+}

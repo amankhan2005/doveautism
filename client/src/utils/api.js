@@ -44,6 +44,11 @@ async function request(path, { method = 'GET', body, signal } = {}) {
   }
 
   if (!res.ok || payload?.ok === false) {
+    if (import.meta.env.DEV && !payload) {
+      // An empty, non-JSON error usually means something other than the Express API answered
+      // (e.g. macOS AirPlay Receiver on port 5000 replies 403). Check the Vite proxy target and that the API is running.
+      console.error(`[api] ${method} ${path} → HTTP ${res.status} with no JSON body (server: ${res.headers.get('server') || 'unknown'}).`);
+    }
     throw new ApiError(payload?.message || 'Something went wrong. Try again in a few minutes.', {
       status: res.status,
       code: payload?.code || 'HTTP_ERROR',
@@ -54,4 +59,6 @@ async function request(path, { method = 'GET', body, signal } = {}) {
 }
 
 export const submitContact = (data, opts) => request('/api/contact', { method: 'POST', body: data, ...opts });
+export const submitApplication = (data, opts) => request('/api/careers/apply', { method: 'POST', body: data, ...opts });
+
 export const fetchSiteInfo = (opts) => request('/api/site-info', opts);

@@ -182,3 +182,10 @@
     align-items: start;
   }
 }
+
+/* Shown beside a Submit that is not ready yet, so the inactive state is explained, not just greyed out. */
+.submitHint {
+  flex: 1 1 16rem;
+  font-size: var(--fs-small);
+  color: var(--slate);
+}

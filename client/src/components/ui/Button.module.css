@@ -111,3 +111,19 @@
   background-position: 100% calc(100% - 8px);
   color: var(--navy);
 }
+
+/* Not ready yet (e.g. a form still missing answers). Still focusable; activating it explains what is missing. */
+.button[aria-disabled='true'] {
+  background: #e4eaf1;
+  color: var(--slate);
+  border-color: transparent;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.button[aria-disabled='true']:hover {
+  background: #e4eaf1;
+  color: var(--slate);
+}
+.button[aria-disabled='true']:focus-visible {
+  box-shadow: var(--focus-ring);
+}

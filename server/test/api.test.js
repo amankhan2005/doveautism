@@ -23,24 +23,34 @@ function serve(app) {
   });
 }
 
-async function post(base, body) {
-  const res = await fetch(`${base}/api/contact`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+async function post(base, body, path = '/api/contact') {
+  const res = await fetch(`${base}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   return { status: res.status, body: await res.json() };
 }
 
 let calls = [];
+let applications = [];
 let mode = 'ok';
 let configured = true;
 let ctx;
 
 before(async () => {
   const app = createApp({
-    env: { ...env, contactRateLimit: { windowMs: 60_000, max: 100 } },
+    env: { ...env, contactRateLimit: { windowMs: 60_000, max: 100 }, careersRateLimit: { windowMs: 60_000, max: 100 } },
     serveClient: true,
     isEmailConfigured: () => configured,
     recordInquiry: () => {},
     sendInquiryEmails: async (data) => {
       calls.push(data);
+      if (mode === 'fail') {
+        const err = new Error('fail');
+        err.reason = 'resend_error';
+        throw err;
+      }
+      return { notificationId: 'test', confirmationSent: mode !== 'noconfirm' };
+    },
+    sendApplicationEmails: async (data) => {
+      applications.push(data);
       if (mode === 'fail') {
         const err = new Error('fail');
         err.reason = 'resend_error';
@@ -153,7 +163,7 @@ test('site-info exposes only public fields', async () => {
 
 test('sitemap and robots are generated from the route table', async () => {
   const sitemap = await (await fetch(`${ctx.base}/sitemap.xml`)).text();
-  for (const p of ['/about', '/services', '/contact', '/privacy-policy']) assert.ok(sitemap.includes(`${env.siteUrl}${p}`), p);
+  for (const p of ['/about', '/services', '/contact', '/careers', '/privacy-policy']) assert.ok(sitemap.includes(`${env.siteUrl}${p}`), p);
   const robots = await (await fetch(`${ctx.base}/robots.txt`)).text();
   assert.match(robots, /Sitemap: .*\/sitemap\.xml/);
   assert.match(robots, /Disallow: \/api\//);
@@ -186,4 +196,112 @@ test('security headers are set and secrets never reach the client', async () => 
   assert.equal(res.headers.get('x-powered-by'), null);
   const html = await res.text();
   assert.doesNotMatch(html, /RESEND|re_[A-Za-z0-9]{8,}/);
+});
+
+/* ── Math CAPTCHA (frontend-only) ────────────────────── */
+
+test('forms submit without any captcha fields and the old captcha endpoints are gone', async () => {
+  calls = [];
+  const r = await post(ctx.base, valid());
+  assert.equal(r.status, 200);
+  assert.equal(calls.length, 1);
+  assert.equal((await fetch(`${ctx.base}/api/captcha`)).status, 404);
+  assert.equal((await fetch(`${ctx.base}/api/captcha/verify`, { method: 'POST' })).status, 404);
+});
+
+/* ── Careers ─────────────────────────────────────────── */
+
+const application = () => ({
+  firstName: 'Jordan',
+  lastName: 'Lee',
+  email: 'Jordan@Example.com',
+  phone: '(555) 010-2030',
+  state: 'nj',
+  role: 'rbt',
+  website: '',
+  startedAt: Date.now() - 10_000,
+});
+const apply = (body) => post(ctx.base, body, '/api/careers/apply');
+
+test('valid application sends both emails and returns ok', async () => {
+  applications = [];
+  mode = 'ok';
+  const r = await apply(application());
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body, { ok: true, confirmationSent: true });
+  assert.equal(applications.length, 1);
+  assert.equal(applications[0].email, 'jordan@example.com');
+  assert.equal(applications[0].role, 'RBT');
+  assert.equal(applications[0].state, 'NJ');
+});
+
+test('application rejects missing fields, unknown roles and states, and bad email or phone', async () => {
+  applications = [];
+  const r = await apply({ ...application(), firstName: '', lastName: '', email: 'x@', phone: 'call me', state: 'ZZ', role: 'CEO' });
+  assert.equal(r.status, 400);
+  assert.equal(r.body.code, 'VALIDATION_ERROR');
+  assert.deepEqual(Object.keys(r.body.errors).sort(), ['email', 'firstName', 'lastName', 'phone', 'role', 'state']);
+  const html = await apply({ ...application(), firstName: '<script>alert(1)</script>' });
+  assert.equal(html.status, 400);
+  assert.ok(html.body.errors.firstName);
+  assert.equal(applications.length, 0);
+});
+
+test('application ignores extra fields such as a resume', async () => {
+  applications = [];
+  const r = await apply({ ...application(), resume: 'data:application/pdf;base64,AAAA', ssn: '000-00-0000' });
+  assert.equal(r.status, 200);
+  assert.deepEqual(Object.keys(applications[0]).sort(), ['email', 'firstName', 'lastName', 'phone', 'role', 'startedAt', 'state', 'website']);
+});
+
+test('application honeypot and timing checks match the contact form', async () => {
+  applications = [];
+  assert.equal((await apply({ ...application(), website: 'http://spam.example' })).status, 200);
+  const fast = await apply({ ...application(), startedAt: Date.now() });
+  assert.equal(fast.body.code, 'SUBMISSION_CHECK_FAILED');
+  assert.equal(applications.length, 0);
+});
+
+test('application returns 503 when email is not configured and 502 when delivery fails', async () => {
+  configured = false;
+  const off = await apply(application());
+  configured = true;
+  assert.equal(off.status, 503);
+  mode = 'fail';
+  const failed = await apply(application());
+  mode = 'ok';
+  assert.equal(failed.status, 502);
+  assert.equal(failed.body.ok, false);
+  assert.equal(failed.body.code, 'DELIVERY_FAILED');
+});
+
+test('application reports when the applicant confirmation was not sent', async () => {
+  mode = 'noconfirm';
+  const r = await apply(application());
+  mode = 'ok';
+  assert.equal(r.status, 200);
+  assert.equal(r.body.confirmationSent, false);
+});
+
+test('careers endpoint is rate limited', async () => {
+  const app = createApp({
+    env: { ...env, careersRateLimit: { windowMs: 60_000, max: 2 } },
+    serveClient: false,
+    isEmailConfigured: () => true,
+    sendApplicationEmails: async () => ({ confirmationSent: true }),
+  });
+  const { server, base } = await serve(app);
+  const statuses = [];
+  for (let i = 0; i < 3; i++) statuses.push((await post(base, application(), '/api/careers/apply')).status);
+  server.close();
+  assert.deepEqual(statuses, [200, 200, 429]);
+});
+
+test('careers page gets its own title, description and canonical URL', async () => {
+  const res = await fetch(`${ctx.base}/careers`);
+  const html = await res.text();
+  assert.equal(res.status, 200);
+  assert.match(html, /<title>Careers \| Join Our Team \| Dove Autism<\/title>/);
+  assert.match(html, /rel="canonical" href="https:\/\/www\.doveautism\.com\/careers"/);
+  assert.match(html, /property="og:url" content="https:\/\/www\.doveautism\.com\/careers"/);
 });

@@ -96,3 +96,77 @@
     margin-top: var(--s-8);
   }
 }
+
+/* ── Phones: a compact, scannable index instead of four stacked cards ── */
+@media (max-width: 639px) {
+  .pathWrap {
+    margin-top: var(--s-6);
+  }
+  .cards {
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .item {
+    border-bottom: 1px solid var(--line);
+  }
+  .card {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    column-gap: var(--s-4);
+    row-gap: var(--s-1);
+    align-items: start;
+    padding: var(--s-5) var(--s-7) var(--s-5) 0;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+  }
+  .card > :first-child {
+    grid-row: span 2;
+    width: 52px;
+    height: 52px;
+    background: var(--card-tint);
+  }
+  .card > :first-child svg {
+    width: 24px;
+    height: 24px;
+  }
+  /* The decorative blob becomes a chevron that signals the row is tappable. */
+  .card::after {
+    right: var(--s-2);
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius: 0;
+    border-right: 2px solid var(--navy);
+    border-bottom: 2px solid var(--navy);
+    background: none;
+    opacity: 1;
+    transform: translateY(-50%) rotate(-45deg);
+  }
+  .card:hover {
+    box-shadow: none;
+  }
+  .card:hover::after {
+    transform: translate(3px, -50%) rotate(-45deg);
+  }
+  .title {
+    margin-top: 0;
+    font-size: 1.1875rem;
+    line-height: 1.3;
+  }
+  .summary {
+    font-size: var(--fs-small);
+    line-height: 1.55;
+  }
+  /* Link text stays the accessible name; the whole row is the visible target. */
+  .more {
+    position: static;
+    min-height: 0;
+    font-size: 0;
+    line-height: 0;
+  }
+  .more::before {
+    border-radius: var(--r-sm);
+    inset: 2px -8px;
+  }
+}

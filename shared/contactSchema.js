@@ -34,8 +34,8 @@ export const LIMITS = Object.freeze({
 /** Submissions completed faster than this are treated as automated. */
 export const MIN_FILL_MS = 3000;
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^[0-9+()\-.\s]+$/;
+export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+export const PHONE_RE = /^[0-9+()\-.\s]+$/;
 // Control characters except tab (\x09), newline (\x0A) and carriage return (\x0D).
 const CONTROL_RE = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
@@ -44,7 +44,7 @@ function toText(value) {
   return value.replace(CONTROL_RE, '');
 }
 
-function singleLine(value) {
+export function singleLine(value) {
   return toText(value).replace(/\s+/g, ' ').trim();
 }
 

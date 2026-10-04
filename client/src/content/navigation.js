@@ -12,6 +12,7 @@ export const FOOTER_NAV = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About Us' },
   { to: '/services', label: 'Services' },
+  { to: '/careers', label: 'Careers' },
   { to: '/contact', label: 'Contact' },
 ];
 

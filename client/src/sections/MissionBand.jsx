@@ -7,6 +7,8 @@ import styles from './MissionBand.module.css';
 
 /** The verified mission statement, given the space it deserves. */
 export function MissionBand({ showLink = true, heading = 'Our mission' }) {
+  // Opening clause gets its own span so the home page can emphasise it on phones; the text is unchanged.
+  const cut = VERIFIED.mission.indexOf(', ') + 1;
   return (
     <Section tone="dawn" spacing="compact" aria-labelledby="mission-title">
       <Container>
@@ -14,7 +16,10 @@ export function MissionBand({ showLink = true, heading = 'Our mission' }) {
           <h2 id="mission-title" className={styles.label}>
             {heading}
           </h2>
-          <p className={styles.statement}>{VERIFIED.mission}</p>
+          <p className={styles.statement}>
+            <span className={styles.opening}>{VERIFIED.mission.slice(0, cut)}</span>
+            {VERIFIED.mission.slice(cut)}
+          </p>
           {showLink && <TextLink to="/about">More about Dove Autism</TextLink>}
         </Reveal>
       </Container>

@@ -70,6 +70,16 @@ export const ROUTES = [
     priority: '0.9',
   },
   {
+    key: 'careers',
+    path: '/careers',
+    title: 'Careers | Join Our Team | Dove Autism',
+    description:
+      'RBTs, BTs and BCBAs can apply to join Dove Autism. Share a few basic details through our short online application — no resume needed for now.',
+    breadcrumb: 'Careers',
+    changefreq: 'monthly',
+    priority: '0.7',
+  },
+  {
     key: 'privacy',
     path: '/privacy-policy',
     title: 'Privacy Policy | Dove Autism',

@@ -128,3 +128,46 @@ export function Checkbox({ id, checked, onChange, error, children, onBlur }) {
     </div>
   );
 }
+
+/**
+ * Larger radio options with a short title and description each (e.g. job roles).
+ * The error is tied to the group so screen readers announce it with the question.
+ */
+export function RadioCards({ name, legend, options, value, onChange, required = false, error, idFor = (v) => `${name}-${v}` }) {
+  const errorId = error ? `${name}-error` : undefined;
+  return (
+    <fieldset className={`${styles.field} ${styles.fieldset} ${error ? styles.hasError : ''}`} aria-describedby={errorId}>
+      <legend className={styles.label}>
+        {legend}
+        <span className={required ? styles.required : styles.optional}>{required ? 'Required' : 'Optional'}</span>
+      </legend>
+      <div className={styles.cards}>
+        {options.map((o) => (
+          <label key={o.value} className={`${styles.card} ${value === o.value ? styles.cardOn : ''}`}>
+            <input
+              id={idFor(o.value)}
+              type="radio"
+              name={name}
+              value={o.value}
+              checked={value === o.value}
+              onChange={onChange}
+              aria-invalid={error ? true : undefined}
+              className={styles.cardInput}
+            />
+            <span className={styles.cardMark} aria-hidden="true" />
+            <span className={styles.cardText}>
+              <span className={styles.cardTitle}>{o.label}</span>
+              {o.description && <span className={styles.cardDesc}>{o.description}</span>}
+            </span>
+          </label>
+        ))}
+      </div>
+      {error && (
+        <p id={errorId} className={styles.error}>
+          <CircleAlert aria-hidden="true" className={styles.errorIcon} strokeWidth={2} />
+          <span>{error}</span>
+        </p>
+      )}
+    </fieldset>
+  );
+}

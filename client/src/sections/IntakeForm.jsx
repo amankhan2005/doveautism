@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, m } from 'framer-motion';
-import { CircleCheck, CircleAlert, LoaderCircle, Send, Info } from 'lucide-react';
+import { CircleCheck, LoaderCircle, Send, Info } from 'lucide-react';
 import {
   SERVICE_OPTIONS,
   CONTACT_METHODS,
@@ -12,21 +12,18 @@ import {
   labelFor,
 } from '@shared/contactSchema.js';
 import { Field, TextInput, TextArea, Select, RadioPills, Checkbox } from '../components/form/Field.jsx';
+import { MathCaptcha } from '../components/form/MathCaptcha.jsx';
+import { ErrorSummary, ServerError } from '../components/form/FormFeedback.jsx';
 import { Button } from '../components/ui/Button.jsx';
+import { useForm } from '../hooks/useForm.js';
+import { useMathCaptcha } from '../hooks/useMathCaptcha.js';
 import { submitContact, ApiError } from '../utils/api.js';
 import { PROPOSED } from '../content/site.js';
-import styles from './IntakeForm.module.css';
+import styles from '../components/form/FormShell.module.css';
 
 const FIELD_ORDER = ['name', 'email', 'phone', 'preferredContact', 'service', 'message', 'consent'];
 const fieldTarget = (field) => (field === 'preferredContact' ? 'preferredContact-email' : field);
-
-function focusField(event, field) {
-  const el = document.getElementById(fieldTarget(field));
-  if (!el) return;
-  event.preventDefault();
-  el.scrollIntoView({ block: 'center' });
-  el.focus({ preventScroll: true });
-}
+const LINKED = { preferredContact: ['phone'] };
 
 function emptyValues(service = '') {
   return {
@@ -43,18 +40,28 @@ function emptyValues(service = '') {
 
 export function IntakeForm() {
   const [params] = useSearchParams();
-  const [values, setValues] = useState(() => emptyValues(params.get('service') || ''));
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+  const form = useForm({
+    initial: emptyValues(params.get('service') || ''),
+    normalize: normalizeContact,
+    validateField,
+    fields: FIELD_ORDER,
+    linked: LINKED,
+  });
+  const { values, errors, touched, update, blur, bind } = form;
+  const captcha = useMathCaptcha();
   const [status, setStatus] = useState('idle'); // idle | submitting | success | error
   const [serverMessage, setServerMessage] = useState('');
   const [summary, setSummary] = useState([]);
   const [attempt, setAttempt] = useState(0);
   const [confirmationSent, setConfirmationSent] = useState(false);
   const startedAt = useRef(Date.now());
+  // Set synchronously: React state would not stop a second click in the same tick.
+  const inFlight = useRef(false);
   const summaryRef = useRef(null);
   const successRef = useRef(null);
   const errorRef = useRef(null);
+
+  const canSubmit = form.isComplete && captcha.solved;
 
   useEffect(() => {
     if (status === 'error') errorRef.current?.focus();
@@ -67,49 +74,29 @@ export function IntakeForm() {
     if (el) requestAnimationFrame(() => el.focus());
   };
 
-  function update(field, value) {
-    const next = { ...values, [field]: value };
-    setValues(next);
-    // Re-check live once a field has been visited or already shows an error.
-    if (touched[field] || errors[field]) {
-      const normalized = normalizeContact(next);
-      setErrors((prev) => {
-        const out = { ...prev, [field]: validateField(field, normalized) };
-        // Phone requirement depends on preferred contact method.
-        if (field === 'preferredContact' || field === 'phone') out.phone = validateField('phone', normalized);
-        return out;
-      });
-    }
+  function showSummary(fieldErrors, captchaError = '') {
+    const list = FIELD_ORDER.filter((f) => fieldErrors[f]).map((f) => ({ field: f, message: fieldErrors[f] }));
+    if (captchaError) list.push({ field: 'captcha', message: captchaError });
+    setSummary(list);
+    setAttempt((n) => n + 1);
+    requestAnimationFrame(() => summaryRef.current?.focus());
   }
-
-  function onBlur(field) {
-    setTouched((t) => ({ ...t, [field]: true }));
-    setErrors((prev) => ({ ...prev, [field]: validateField(field, normalizeContact(values)) }));
-  }
-
-  const bind = (field) => ({
-    name: field,
-    value: values[field],
-    onChange: (e) => update(field, e.target.value),
-    onBlur: () => onBlur(field),
-  });
 
   async function onSubmit(e) {
     e.preventDefault();
-    if (status === 'submitting') return;
+    if (inFlight.current) return; // no accidental double submissions
 
+    // Re-checked here, not just via the button state, so calling submit directly cannot skip it.
     const data = normalizeContact({ ...values, startedAt: startedAt.current });
     const result = validateContact(data);
-    if (!result.valid) {
-      setErrors(result.errors);
-      setTouched(Object.fromEntries(FIELD_ORDER.map((f) => [f, true])));
-      const list = FIELD_ORDER.filter((f) => result.errors[f]).map((f) => ({ field: f, message: result.errors[f] }));
-      setSummary(list);
-      setAttempt((n) => n + 1);
-      requestAnimationFrame(() => summaryRef.current?.focus());
+    if (!result.valid || !captcha.solved) {
+      form.showErrors(result.errors);
+      captcha.markAttempted();
+      showSummary(result.errors, captcha.problem);
       return;
     }
 
+    inFlight.current = true;
     setSummary([]);
     setStatus('submitting');
     setServerMessage('');
@@ -117,25 +104,24 @@ export function IntakeForm() {
       const response = await submitContact(data);
       setConfirmationSent(Boolean(response?.confirmationSent));
       setStatus('success');
+      captcha.refresh(); // a fresh question for the next submission
     } catch (err) {
       if (err instanceof ApiError && err.errors) {
-        setErrors(err.errors);
-        setSummary(FIELD_ORDER.filter((f) => err.errors[f]).map((f) => ({ field: f, message: err.errors[f] })));
+        form.showErrors(err.errors);
         setStatus('idle');
-        setAttempt((n) => n + 1);
-        requestAnimationFrame(() => summaryRef.current?.focus());
+        showSummary(err.errors);
         return;
       }
       setServerMessage(err.message);
       setStatus('error');
       setAttempt((n) => n + 1);
+    } finally {
+      inFlight.current = false;
     }
   }
 
   function reset() {
-    setValues(emptyValues());
-    setErrors({});
-    setTouched({});
+    form.reset(emptyValues());
     setSummary([]);
     setServerMessage('');
     setConfirmationSent(false);
@@ -201,35 +187,7 @@ export function IntakeForm() {
               </p>
             </div>
 
-            <AnimatePresence>
-              {summary.length > 0 && (
-                <m.div
-                  key={`summary-${attempt}`}
-                  ref={summaryRef}
-                  tabIndex={-1}
-                  role="alert"
-                  className={styles.summary}
-                  initial={{ opacity: 0, x: 0 }}
-                  animate={{ opacity: 1, x: [0, -4, 4, -2, 2, 0] }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <p className={styles.summaryTitle}>
-                    <CircleAlert aria-hidden="true" strokeWidth={2} />
-                    {summary.length === 1 ? 'One field needs attention' : `${summary.length} fields need attention`}
-                  </p>
-                  <ul>
-                    {summary.map((s) => (
-                      <li key={s.field}>
-                        <a href={`#${fieldTarget(s.field)}`} onClick={(e) => focusField(e, s.field)}>
-                          {s.message}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </m.div>
-              )}
-            </AnimatePresence>
+            <ErrorSummary items={summary} attempt={attempt} summaryRef={summaryRef} targetFor={fieldTarget} />
 
             <div className={styles.notice}>
               <Info aria-hidden="true" strokeWidth={2} />
@@ -286,7 +244,7 @@ export function IntakeForm() {
               id="consent"
               checked={values.consent}
               onChange={(e) => update('consent', e.target.checked)}
-              onBlur={() => onBlur('consent')}
+              onBlur={() => blur('consent')}
               error={touched.consent && errors.consent}
             >
               Dove Autism may contact me about this inquiry. I have read the{' '}
@@ -297,36 +255,26 @@ export function IntakeForm() {
               .
             </Checkbox>
 
+            <MathCaptcha captcha={captcha} />
+
             {/* Honeypot — hidden from people and assistive technology; bots fill it. */}
             <div className={styles.honeypot} aria-hidden="true">
               <label htmlFor="website">Leave this field empty</label>
               <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" value={values.website} onChange={(e) => update('website', e.target.value)} />
             </div>
 
-            <AnimatePresence>
-              {status === 'error' && (
-                <m.div
-                  key={`error-${attempt}`}
-                  ref={errorRef}
-                  tabIndex={-1}
-                  role="alert"
-                  className={styles.serverError}
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0, x: [0, -4, 4, -2, 2, 0] }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <CircleAlert aria-hidden="true" strokeWidth={2} />
-                  <div>
-                    <p className={styles.serverErrorTitle}>Your message was not sent</p>
-                    <p>{serverMessage} Your answers are still here, so you can send again.</p>
-                  </div>
-                </m.div>
-              )}
-            </AnimatePresence>
+            <ServerError show={status === 'error'} attempt={attempt} errorRef={errorRef} title="Your message was not sent">
+              {serverMessage} Your answers are still here, so you can send again.
+            </ServerError>
 
             <div className={styles.actions}>
-              <Button type="submit" size="lg" disabled={status === 'submitting'} aria-describedby="submit-status">
+              <Button
+                type="submit"
+                size="lg"
+                disabled={status === 'submitting'}
+                aria-disabled={!canSubmit || undefined}
+                aria-describedby={canSubmit ? 'submit-status' : 'submit-status submit-hint'}
+              >
                 {status === 'submitting' ? (
                   <>
                     <LoaderCircle className={styles.spinner} aria-hidden="true" />
@@ -339,6 +287,11 @@ export function IntakeForm() {
                   </>
                 )}
               </Button>
+              {!canSubmit && status !== 'submitting' && (
+                <p id="submit-hint" className={styles.submitHint}>
+                  Complete the required fields and the security check to send your message.
+                </p>
+              )}
               <p id="submit-status" className="visually-hidden" aria-live="polite">
                 {status === 'submitting' ? 'Sending your message.' : ''}
               </p>

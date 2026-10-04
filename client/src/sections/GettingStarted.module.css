@@ -1,3 +1,8 @@
+.availability {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--s-5);
+}
 .steps {
   list-style: none;
   display: grid;
@@ -45,5 +50,62 @@
     left: calc(50% + 48px);
     width: calc(100% - 96px);
     border-top: 3px dotted var(--line-strong);
+  }
+}
+
+/* ── Phones: a left-aligned timeline instead of three centered columns ── */
+@media (max-width: 639px) {
+  div.heading {
+    margin-inline: 0;
+    text-align: left;
+    justify-items: start;
+  }
+  div.heading.heading > div {
+    justify-items: start;
+  }
+  .availability {
+    justify-content: flex-start;
+    margin-top: var(--s-4);
+  }
+  .steps {
+    gap: 0;
+    margin-top: var(--s-6);
+  }
+  .step {
+    grid-template-columns: 48px 1fr;
+    column-gap: var(--s-4);
+    row-gap: var(--s-1);
+    justify-items: start;
+    text-align: left;
+    padding: 0 0 var(--s-6);
+  }
+  .step:last-child {
+    padding-bottom: 0;
+  }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 60px;
+    bottom: 10px;
+    border-left: 2px dotted var(--line-strong);
+  }
+  .number {
+    grid-row: span 2;
+    width: 48px;
+    height: 48px;
+    font-size: 1.125rem;
+    box-shadow: none;
+  }
+  .title {
+    align-self: center;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    font-size: 1.1875rem;
+  }
+  .text {
+    font-size: var(--fs-small);
+    line-height: 1.55;
   }
 }

@@ -1,10 +1,11 @@
 import { Router } from 'express';
-import { contactRateLimiter } from '../middleware/rateLimit.js';
+import { contactRateLimiter, rateLimiter } from '../middleware/rateLimit.js';
 import { makeContactController } from '../controllers/contact.controller.js';
+import { makeCareersController } from '../controllers/careers.controller.js';
 import { makeSiteInfoController } from '../controllers/siteInfo.controller.js';
 import { isDbConnected } from '../config/db.js';
 
-export function apiRoutes({ env, sendInquiryEmails, isEmailConfigured, recordInquiry }) {
+export function apiRoutes({ env, sendInquiryEmails, sendApplicationEmails, isEmailConfigured, recordInquiry }) {
   const router = Router();
 
   router.get('/health', (_req, res) => {
@@ -18,6 +19,12 @@ export function apiRoutes({ env, sendInquiryEmails, isEmailConfigured, recordInq
     '/contact',
     contactRateLimiter(env.contactRateLimit),
     makeContactController({ sendInquiryEmails, isEmailConfigured, recordInquiry })
+  );
+
+  router.post(
+    '/careers/apply',
+    rateLimiter({ ...env.careersRateLimit, message: 'You have sent several applications in a short time. Wait a few minutes, then try again.' }),
+    makeCareersController({ sendApplicationEmails, isEmailConfigured })
   );
 
   return router;

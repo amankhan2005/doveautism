@@ -31,7 +31,7 @@ export function CtaBand({ heading = PROPOSED.ctaHeading, body = PROPOSED.ctaBody
                 {PRIMARY_CTA.label}
               </ButtonLink>
               {secondary && (
-                <ButtonLink to={secondary.to} variant="ghostInverse" size="lg">
+                <ButtonLink to={secondary.to} variant="ghostInverse" size="lg" className={styles.secondary}>
                   {secondary.label}
                 </ButtonLink>
               )}

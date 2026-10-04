@@ -62,3 +62,45 @@
     margin-bottom: 0;
   }
 }
+
+/* ── Home page, phones: photo flush to the top of the panel, one clear action ── */
+@media (max-width: 639px) {
+  :global([data-page='home']) .withPhoto {
+    padding: 0 0 var(--s-6);
+    border-radius: var(--r-card);
+  }
+  :global([data-page='home']) .withPhoto .photo {
+    margin-bottom: var(--s-5);
+    border-radius: 0;
+  }
+  :global([data-page='home']) .withPhoto .copy {
+    padding-inline: var(--s-5);
+    gap: var(--s-3);
+  }
+  :global([data-page='home']) .withPhoto .feathers {
+    width: 160px;
+    right: -16px;
+    bottom: -20px;
+    opacity: 0.2;
+  }
+  :global([data-page='home']) .body {
+    font-size: 1.0625rem;
+  }
+  :global([data-page='home']) .actions {
+    align-items: center;
+    gap: var(--s-2) var(--s-5);
+  }
+  :global([data-page='home']) .actions > :first-child {
+    padding-inline: var(--s-6);
+  }
+  :global([data-page='home']) .actions > .secondary {
+    min-height: 48px;
+    padding: 0 var(--s-1);
+    border-color: transparent;
+    background: none;
+    font-size: 1.0625rem;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+  }
+}
