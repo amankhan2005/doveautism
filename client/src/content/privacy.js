@@ -59,7 +59,7 @@ export const PRIVACY = {
   closing: [
     [
       'If you have any questions or concerns about this privacy policy, please feel free to contact us at ',
-      { text: 'webieapp@gmail.com', href: 'mailto:webieapp@gmail.com' },
+      { text: 'info@doveautism.com', href: 'mailto:info@doveautism.com' },
       ' or ',
       { text: '+1 (410) 405-7050', href: 'tel:+14104057050' },
       '.',
