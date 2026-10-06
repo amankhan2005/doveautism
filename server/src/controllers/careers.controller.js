@@ -52,7 +52,7 @@ export function makeCareersController({ sendApplicationEmails, isEmailConfigured
       logger.info('careers.sent', { requestId, role: data.role, confirmationSent });
       return res.status(200).json({ ok: true, confirmationSent });
     } catch (err) {
-      logger.error('careers.delivery_failed', { requestId, role: data.role, reason: err.reason || err.name });
+      logger.error('careers.delivery_failed', { requestId, role: data.role, reason: err.reason || err.name, statusCode: err.statusCode ?? null, detail: err.detail ?? null });
       return res.status(502).json({
         ok: false,
         code: 'DELIVERY_FAILED',

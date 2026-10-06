@@ -53,7 +53,7 @@ export function makeContactController({ sendInquiryEmails, isEmailConfigured, re
       recordInquiry({ service: data.service, preferredContact: data.preferredContact, emailStatus: 'sent', confirmationSent });
       return res.status(200).json({ ok: true, confirmationSent });
     } catch (err) {
-      logger.error('contact.delivery_failed', { requestId, service: data.service, reason: err.reason || err.name });
+      logger.error('contact.delivery_failed', { requestId, service: data.service, reason: err.reason || err.name, statusCode: err.statusCode ?? null, detail: err.detail ?? null });
       recordInquiry({ service: data.service, preferredContact: data.preferredContact, emailStatus: 'failed' });
       return res.status(502).json({
         ok: false,

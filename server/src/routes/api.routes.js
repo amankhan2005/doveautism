@@ -5,6 +5,10 @@ import { makeCareersController } from '../controllers/careers.controller.js';
 import { makeSiteInfoController } from '../controllers/siteInfo.controller.js';
 import { isDbConnected } from '../config/db.js';
 
+// Express 4 ignores rejected promises from async handlers; on Node 15+ an unhandled
+// rejection exits the process (Render then answers 502). Route them to errorHandler instead.
+const guard = (handler) => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
+
 export function apiRoutes({ env, sendInquiryEmails, sendApplicationEmails, isEmailConfigured, recordInquiry }) {
   const router = Router();
 
@@ -18,13 +22,13 @@ export function apiRoutes({ env, sendInquiryEmails, sendApplicationEmails, isEma
   router.post(
     '/contact',
     contactRateLimiter(env.contactRateLimit),
-    makeContactController({ sendInquiryEmails, isEmailConfigured, recordInquiry })
+    guard(makeContactController({ sendInquiryEmails, isEmailConfigured, recordInquiry }))
   );
 
   router.post(
     '/careers/apply',
     rateLimiter({ ...env.careersRateLimit, message: 'You have sent several applications in a short time. Wait a few minutes, then try again.' }),
-    makeCareersController({ sendApplicationEmails, isEmailConfigured })
+    guard(makeCareersController({ sendApplicationEmails, isEmailConfigured }))
   );
 
   return router;

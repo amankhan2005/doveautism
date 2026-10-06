@@ -4,12 +4,20 @@ import { logger } from '../utils/logger.js';
 import { notificationEmail, confirmationEmail, applicationNotificationEmail, applicationConfirmationEmail } from './emailTemplates.js';
 
 export class EmailDeliveryError extends Error {
-  constructor(reason) {
+  constructor(reason, { statusCode = null, detail = null } = {}) {
     super('Email delivery failed');
     this.name = 'EmailDeliveryError';
     this.reason = reason;
+    // Server-log only (never sent to the browser): Resend's HTTP status and message,
+    // e.g. 403 "The doveautism.com domain is not verified".
+    this.statusCode = statusCode;
+    this.detail = detail;
   }
 }
+
+// Resend messages can quote addresses; the logger must never receive them.
+const redact = (message) =>
+  typeof message === 'string' ? message.replace(/[^\s@<>()"']+@[^\s@<>()"']+/g, '[email]').slice(0, 300) : null;
 
 let client = null;
 function resend() {
@@ -22,9 +30,14 @@ async function send(payload) {
   try {
     result = await resend().emails.send(payload);
   } catch (err) {
-    throw new EmailDeliveryError(err?.name || 'network_error');
+    throw new EmailDeliveryError(err?.name || 'network_error', { detail: redact(err?.message) });
   }
-  if (result?.error) throw new EmailDeliveryError(result.error.name || 'resend_error');
+  if (result?.error) {
+    throw new EmailDeliveryError(result.error.name || 'resend_error', {
+      statusCode: result.error.statusCode ?? null,
+      detail: redact(result.error.message),
+    });
+  }
   return result?.data?.id ?? null;
 }
 
@@ -63,7 +76,7 @@ export async function sendInquiryEmails(data, { requestId } = {}) {
       confirmationSent = true;
     } catch (err) {
       // The team already has the inquiry, so this does not fail the request.
-      logger.warn('contact.confirmation_failed', { requestId, reason: err.reason });
+      logger.warn('contact.confirmation_failed', { requestId, reason: err.reason, statusCode: err.statusCode ?? null, detail: err.detail ?? null });
     }
   }
 
@@ -104,7 +117,7 @@ export async function sendApplicationEmails(data, { requestId } = {}) {
     confirmationSent = true;
   } catch (err) {
     // The team already has the application, so this does not fail the request.
-    logger.warn('careers.confirmation_failed', { requestId, reason: err.reason });
+    logger.warn('careers.confirmation_failed', { requestId, reason: err.reason, statusCode: err.statusCode ?? null, detail: err.detail ?? null });
   }
 
   return { notificationId, confirmationSent };
