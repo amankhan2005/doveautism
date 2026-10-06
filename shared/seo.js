@@ -83,7 +83,7 @@ export const ROUTES = [
     key: 'privacy',
     path: '/privacy-policy',
     title: 'Privacy Policy | Dove Autism',
-    description: 'How Dove Autism handles information shared through this website.',
+    description: 'Privacy Policy for Mobile Information and Text Messaging Consent.',
     breadcrumb: 'Privacy Policy',
     changefreq: 'yearly',
     priority: '0.3',

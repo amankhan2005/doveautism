@@ -1,12 +1,17 @@
-.head {
-  display: grid;
-  gap: var(--s-3);
-  margin-bottom: var(--s-6);
+.policy > section > * + * {
+  margin-top: var(--s-4);
 }
-.updated {
-  color: var(--slate);
-  font-size: var(--fs-small);
+.policy > section > ul {
+  margin-top: var(--s-3);
 }
-.contact {
-  margin-top: var(--s-6);
+.closing {
+  margin-top: var(--s-7);
+  padding-top: var(--s-6);
+  border-top: 1px solid var(--line);
+}
+.closing > * + * {
+  margin-top: var(--s-4);
+}
+.nowrap {
+  white-space: nowrap;
 }
